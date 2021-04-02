@@ -20,16 +20,11 @@ import java.util.Properties;
 public class Connexion {
     public Connection getConn()throws Exception
     {
-//        String url = "jdbc:postgresql://localhost/sitel";
-//        Properties props = new Properties();
-//        props.setProperty("user","cloudproj");
-//        props.setProperty("password","123456");
-//        props.setProperty("ssl","true");
-//        Connection con = DriverManager.getConnection(url, props);
-        String url = "jdbc:postgresql://localhost/sitel?user=cloudproj&password=123456";
+        String url = "jdbc:postgresql://ec2-34-198-31-223.compute-1.amazonaws.com/ddl85loc6bhajm?user=ectyngvtxymmzs&password=f6fe3007faf8880f672131be7cf1bb6395818aaef0e2c84fe9c9e7d0926b9543";
         Connection con = DriverManager.getConnection(url);
         return con;
     }
+	/*
     public MongoDatabase getConnexionMongodb() throws Exception {
         String url = "mongodb://localhost:27017/?readPreference=primary&ssl=false";
         MongoClient mongo = null;
@@ -43,6 +38,7 @@ public class Connexion {
         System.out.println("Opened MongoDb database successfully");
 	    return database;
     }
+	*/
     public MongoDatabase getConnexionMongodbEnLigne() throws Exception {
 //        MongoClientURI uri = new MongoClientURI(
 //        "mongodb+srv://admin:admin@sitel.xmhb2.mongodb.net/sitel?retryWrites=true&w=majority");
