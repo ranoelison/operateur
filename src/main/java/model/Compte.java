@@ -30,6 +30,12 @@ public class Compte {
     String token;
     String idCompte;
     String idOffre;
+    double solde;
+
+    public void setSolde(double solde) {
+        this.solde = solde;
+    }
+    
 
     public void setIdOffre(String idOffre) {
         this.idOffre = idOffre;
@@ -354,13 +360,6 @@ public class Compte {
              pst.setString(1, idCompte);
              ResultSet res = pst.executeQuery();
             while(res.next()){
-//                this.restevoixint = restevoixint;
-//        this.restevoixext = restevoixext;
-//        this.restevoixmixte = restevoixmixte;
-//        this.restesmsi = restesmsi;
-//        this.restesmse = restesmse;
-//        this.restesmsm = restesmsm;
-//        this.resteqtenet = resteqtenet;
                temp = new ResteForfait(res.getString("idForfait"),res.getDouble(1),res.getDouble(2),res.getDouble(3),res.getInt(4),res.getInt(5),res.getInt(6),res.getDouble(7));
                list.add(temp);
             }
@@ -380,80 +379,39 @@ public class Compte {
         }
         return idf;
     }
-   //    public double getDepenseOp(Connection con,String idF,String typeForfait,String tyOp) throws Exception{
-//        double dep =0;
-//        PreparedStatement pst = null;
-//        try{
-//            if(con==null){ con = new Connexion().getConn(); }
-//             String sql = "select sum(qte) from ConsommationForfait where idForfait=? and typeService=? and operateur=?";
-//             pst = con.prepareStatement(sql);
-//            pst.setString(1,idF);
-//            pst.setString(2, typeForfait);
-//            pst.setString(3,tyOp);
-//            ResultSet res = pst.executeQuery();
-//            while(res.next()){
-//                dep = res.getDouble("sum");
-//            }
-//        }
-//        catch(Exception ex){
-//            throw ex;
-//        }
-//         finally {
-//            if (pst != null) {
-//                pst.close();
-//            }
-//        }
-//        return dep;
-//    }
-
-//    public Forfait[] getForfaits(Connection con,String idCompte,String typeForfait) throws Exception{
-//        Forfait[] forf = null;
-//          PreparedStatement pst = null;
-//        ArrayList list = new ArrayList();
-//        try{
-//            if(con==null){ con = new Connexion().getConn(); }
-//             String sql = "select * from V_detailForfaits where idCompte=? and typeservice=? order by dateAChat asc";
-//             pst = con.prepareStatement(sql);
-//             pst.setString(1,idCompte);
-//             pst.setString(2, typeForfait);
-//            ResultSet res = pst.executeQuery();
-//            Forfait temp = null;
-//            Offre tOff = null;
-//            String idf =null;
-//            while(res.next()){
-//                if(res.getString("idForfait").compareTo(idf)==0){
-//                    tOff.setDetails(new DetailOffre(tOff.getIdOffre(),res.getString("typeService"),res.getDouble("qte"),res.getString("unite"),res.getString("siteAcces"),res.getString("operateur")));
-//                }
-//                else{
-//                    tOff = new Offre(res.getString("idOffre"),res.getString("intitule"),res.getInt("validite"),res.getString("uniteTemps"),res.getDouble("cout"));
-//                    tOff.setDetails(new DetailOffre(tOff.getIdOffre(),res.getString("typeService"),res.getDouble("qte"),res.getString("unite"),res.getString("siteAcces"),res.getString("operateur")));
-//                    temp = new Forfait(res.getString("idForfait"),idCompte,tOff,res.getTimestamp("dateAchat"),res.getTimestamp("dateExp"));
-//                }
-//                idf = temp.getIdForfait();
-//                list.add(temp);
-//            }
-//            Object[] obj = list.toArray();
-//            forf = new Forfait[obj.length];
-//            for(int j=0;j<forf.length;j++){
-//                forf[j] = (Forfait)obj[j];
-//            }
-//        }
-//        catch(Exception ex){
-//            throw ex;
-//        }
-//         finally {
-//            if (pst != null) {
-//                pst.close();
-//            }
-//        }
-//        return forf;
-//    }
     public Compte[] getInfo(){
         Compte[] cpt = null;
         return cpt;
     }
 
+    public Compte(String token) throws Exception {
+        Connection con = null;
+         PreparedStatement pst = null;
+        try{
+             con = new Connexion().getConn();
+            idCompte = new Fonction().getIdToken(con, "client", token);
+            String sql = "select numero ,sum(montant)as solde from compte where idCompte=? ";
+            pst = con.prepareStatement(sql);
+             pst.setString(1, idCompte);
+             ResultSet res = pst.executeQuery();
+            while(res.next()){
+                this.setNumero(res.getString("numero"));
+                this.setSolde(res.getDouble("solde"));
+            }
+        }
+        catch(Exception e){
+            throw e;
+        }
+         finally {
+            if (pst != null) {
+                pst.close();
+            }
+              if (con != null) {
+                con.close();
+            }
+        }
+    }
+
     public Compte() {
     }
-    
 }

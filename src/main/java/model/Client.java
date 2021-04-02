@@ -116,6 +116,6 @@ public class Client{
                 con.close();
             }
         }
-        return sql;
+        return numero;
     }
 }
